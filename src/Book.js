@@ -1,22 +1,25 @@
 import React from "react";
 
 export default function Book(props) {
-  var title = props.title;
-  var image = props.image;
-  var author = props.author;
-  var bookShelfName = props.bookShelfName;
-  var onBookShelfChange = props.onBookShelfChange;
+  const { title, imageLinks = {}, authors = [], shelf = "none" } = props.book;
+  const { thumbnail } = imageLinks;
+  const { updateBook } = props;
   return (
     <div className="book">
       <div className="book-top">
         <div
           className="book-cover"
-          style={{ width: 128, height: 193, backgroundImage: image }}
+          style={{
+            width: 128,
+            height: 193,
+            backgroundImage: `url("${thumbnail}")`
+          }}
         />
         <div className="book-shelf-changer">
           <select
+            value={shelf}
             onChange={event => {
-              onBookShelfChange(title, bookShelfName, event.target.value);
+              updateBook(props.book, event.target.value);
             }}
           >
             <option value="move" disabled>
@@ -30,7 +33,7 @@ export default function Book(props) {
         </div>
       </div>
       <div className="book-title">{title}</div>
-      <div className="book-authors">{author}</div>
+      <div className="book-authors">{authors.join(", ")}</div>
     </div>
   );
 }
